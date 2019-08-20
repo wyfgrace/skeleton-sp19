@@ -26,6 +26,7 @@ public class Body {
         this.imgFileName = b.imgFileName;
     }
 
+
     private static double square(double x) {
         return x * x;
     }
@@ -78,6 +79,12 @@ public class Body {
             xxPos = xxPos + dt * xxVel;
             yyPos = yyPos + dt * yyVel;
     }
+
+    public void draw() {
+        StdDraw.picture(xxPos, yyPos, "images/" + imgFileName);
+    }
+
+
 
 
 //
