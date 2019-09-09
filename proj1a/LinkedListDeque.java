@@ -88,7 +88,7 @@ public class LinkedListDeque<T> {
     public T removeFirst() {
         Node<T> p = first;
         if (p == null) {
-            throw new IllegalStateException("Linked list deque is empty");
+            return null;
         } else if(p.next == null) {
             first = null;
             last = null;
@@ -106,7 +106,7 @@ public class LinkedListDeque<T> {
     public T removeLast() {
         Node<T> p = last;
         if (p == null) {
-            throw new IllegalStateException("Linked list deque is empty");
+            return null;
         } else if(p.pre == null) {
             last = null;
             first = null;
@@ -123,6 +123,9 @@ public class LinkedListDeque<T> {
     public T get(int index) {
         int i = 0;
         Node<T> p = first;
+        if(p == null){
+            return null;
+        }
         while (i < index){
             if (p.next == null){
                 return null;

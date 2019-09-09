@@ -6,7 +6,7 @@ public class ArrayDeque<T> {
 
     public ArrayDeque() {
         size = 0;
-        items = (T[]) new Object[8];
+        items = (T[]) new Object[10];
         nextFirst = 3;
         nextLast = 4;
     }
@@ -24,6 +24,10 @@ public class ArrayDeque<T> {
         return size == 0;
     }
 
+    int getActualLength() {
+        return items.length;
+    }
+
     public void printDeque() {
         int i = 0;
         while (i < size) {
@@ -33,21 +37,34 @@ public class ArrayDeque<T> {
         System.out.println();
     }
 
+    private int newItemLength(){
+        int tempItemsLength;
+        if (size<60){
+            tempItemsLength = 30 + items.length;
+        }else{
+            tempItemsLength = size + size/2;
+        }
+        return tempItemsLength;
+    }
+
+
     private void arrayExpand() {
         if (nextFirst != nextLast) {
             throw new IllegalStateException("Expand can only be called when nextFirst = nextLast");
         }
-        T[] tempItems = (T[]) new Object[2 * items.length];
-        int tempItemsLength = 2 * items.length;
-        int rightHalfLength = size - nextFirst;
+        int tempItemsLength= newItemLength();
+        T[] tempItems = (T[]) new Object[tempItemsLength];
+        int rightHalfLength = items.length-1 - nextFirst;
         int rightHalfStart = tempItemsLength - rightHalfLength;
-        int tempNextFirst = nextFirst;
-        int tempNextLast = rightHalfStart - 1;
-        System.arraycopy(items, 0, tempItems, 0, nextFirst);
+        int tempNextLast = nextFirst;
+        int tempNextFirst = rightHalfStart - 1;
+        System.arraycopy(items, 0, tempItems, 0, nextLast);
         System.arraycopy(items, nextFirst + 1, tempItems, rightHalfStart, rightHalfLength);
         items = tempItems;
         nextFirst = tempNextFirst;
         nextLast = tempNextLast;
+
+//        System.out.println("new length after expand. " + items.length);
     }
 
     public void addFirst(T item) {
@@ -88,10 +105,30 @@ public class ArrayDeque<T> {
         return size;
     }
 
+    private void arrayShrink(){
+        if (items.length >20 && size < items.length/3){
+            int tempItemsLength = items.length-items.length/3;
+            T[] tempItems = (T[]) new Object[tempItemsLength];
+            if (nextLast < nextFirst){
+                int rightHalfLength = items.length-1 - nextFirst;
+                System.arraycopy(items,nextFirst + 1, tempItems, 0, rightHalfLength);
+                System.arraycopy(items,0,tempItems,rightHalfLength,nextLast);
+            }else {
+                System.arraycopy(items,nextFirst+1,tempItems,0,size);
+            }
+            nextFirst = tempItemsLength-1;
+            nextLast = size;
+            items= tempItems;
+
+//            System.out.println("new length after shrink. " + items.length);
+        }
+    }
+
     public T removeFirst() {
         if (size == 0) {
             return null;
         }
+        arrayShrink();
 
         if (nextFirst < items.length - 1) {
             size--;
@@ -114,7 +151,7 @@ public class ArrayDeque<T> {
         if (size == 0) {
             return null;
         }
-
+        arrayShrink();
         if (nextLast > 0) {
             size--;
             final T tempItem = items[nextLast - 1];
@@ -134,7 +171,7 @@ public class ArrayDeque<T> {
 
     public T get(int index) {
         if (index >= size || index < 0) {
-            throw new IllegalStateException();
+            return null;
         }
         final int position = (index + nextFirst + 1) % items.length;
         return items[position];
