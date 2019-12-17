@@ -27,8 +27,4 @@ public class TestHugLife {
         StdDraw.show(20);
 
     }
-
-    public static void main(String[] args) {
-        jh61b.junit.textui.runClasses(TestHugLife.class);
-    }
 } 
