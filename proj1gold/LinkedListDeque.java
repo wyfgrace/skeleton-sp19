@@ -1,34 +1,4 @@
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
-    @Override
-    public Iterator<T> iterator() {
-        return new MyIterator<>(this.first);
-    }
-
-    private static class MyIterator<T> implements Iterator<T> {
-        Node<T> next;
-        private MyIterator(Node<T> first){
-            next = first;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return next != null;
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext()){
-                throw new NoSuchElementException();
-            }
-            Node<T> curr = next;
-            next = next.next;
-            return curr.item;
-        }
-    }
-
+public class LinkedListDeque<T> implements Deque<T>{
     private static class Node<T> {
         private final T item;
         private Node<T> pre;
@@ -59,18 +29,15 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T>{
     }
 
     public LinkedListDeque(LinkedListDeque<T> other){
-        this.first = null;
-        this.last = null;
-        this.size = 0;
-        for (T currItem : other){
-            this.addLast(currItem);
-        }
+        first = null;
+        last = null;
+        size = 0;
 
-//        Node<T> p = other.first;
-//        while (p != null){
-//            this.addLast(p.item);
-//            p = p.next;
-//        }
+        Node<T> p = other.first;
+        while (p != null){
+            addLast(p.item);
+            p = p.next;
+        }
     }
 
     public boolean isEmpty(){

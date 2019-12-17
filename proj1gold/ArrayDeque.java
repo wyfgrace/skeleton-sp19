@@ -1,47 +1,8 @@
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
+public class ArrayDeque<T> implements Deque<T> {
     private int size;
     private T[] items;
     private int nextFirst;
     private int nextLast;
-
-    @Override
-    public Iterator<T> iterator() {
-        return new MyIterator<>(items, nextFirst, nextLast);
-    }
-
-    private static class MyIterator<T> implements Iterator<T> {
-        T[] items;
-        int nextLast;
-        int p;
-       private MyIterator(T[] items, int nextFirst, int nextLast){
-           this.items = items;
-           this.nextLast = nextLast;
-           p = nextFirst +1;
-        }
-
-        @Override
-        public boolean hasNext() {
-            if (p == items.length -1) {
-                return nextLast != 0;
-            } else {
-                return p != nextLast;
-            }
-        }
-
-        @Override
-        public T next() {
-            if (!hasNext()){
-                throw new NoSuchElementException();
-            }
-            T next = items[p];
-            p += 1;
-            return  next;
-        }
-    }
-
 
     public ArrayDeque() {
         size = 0;
@@ -215,6 +176,4 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         final int position = (index + nextFirst + 1) % items.length;
         return items[position];
     }
-
-
 }
